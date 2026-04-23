@@ -4,6 +4,7 @@
 
 # local creations
 pokedexcli
+repl.log
 
 # Binaries for programs and plugins
 *.exe
