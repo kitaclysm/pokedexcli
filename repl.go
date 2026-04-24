@@ -67,18 +67,33 @@ func getCommands() map[string]cliCommand {
 			description:	"Displays a help message",
 			callback:		commandHelp,
 		},
+		"map": {
+			name:			"map",
+			description:	"Displays next 20 location areas in Pokemon world",
+			callback: 		commandMap,
+		},
+		"mapb": {
+			name:			"mapb",
+			description:	"Displays previous 20 location areas in Pokemon world",
+			callback:		commandMapB,
+		},
 	}
 }
 
+type Config struct {
+	Next		*string
+	Previous	*string
+}
+
 // EXIT callback
-func commandExit() error {
+func commandExit(cnfg *Config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
 // HELP callback
-func commandHelp() error {
+func commandHelp(cnfg *Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
@@ -86,4 +101,21 @@ func commandHelp() error {
 		fmt.Printf("%s:	%s\n", cmd.name, cmd.description)
 	}
 	return nil
+}
+
+// MAP command
+func commandMap(cnfg *Config) error {
+	var result Location
+	if cnfg.Next == nil {
+		result = GetLocations("https://pokeapi.co/api/v2/location-area/")
+		cnfg.Next = result.Next
+		cnfg.Previous = result.Previous
+	} else {
+		url = *pageURL
+	}
+}
+
+// MAPB command
+func commandMapB(cnfg *Config) error {
+
 }
