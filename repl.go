@@ -21,9 +21,15 @@ func cleanInput(text string) []string {
 	return words
 }
 
+type Config struct {
+	Next		*string
+	Previous	*string
+}
+
 // start the CLI
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
+	cfg := &Config{}
 	for ;; {
 		fmt.Print("Pokedex > ")
 		if scanner.Scan() {
@@ -35,7 +41,7 @@ func startRepl() {
 			userCall := results[0]
 			command, exists := getCommands()[userCall]
 			if exists {
-				err := command.callback()
+				err := command.callback(cfg)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -51,7 +57,7 @@ func startRepl() {
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func() error
+	callback	func(*Config) error
 }
 
 // defined commands
@@ -78,44 +84,4 @@ func getCommands() map[string]cliCommand {
 			callback:		commandMapB,
 		},
 	}
-}
-
-type Config struct {
-	Next		*string
-	Previous	*string
-}
-
-// EXIT callback
-func commandExit(cnfg *Config) error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
-}
-
-// HELP callback
-func commandHelp(cnfg *Config) error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("Usage:")
-	fmt.Println()
-	for _, cmd := range getCommands() {
-		fmt.Printf("%s:	%s\n", cmd.name, cmd.description)
-	}
-	return nil
-}
-
-// MAP command
-func commandMap(cnfg *Config) error {
-	var result Location
-	if cnfg.Next == nil {
-		result = GetLocations("https://pokeapi.co/api/v2/location-area/")
-		cnfg.Next = result.Next
-		cnfg.Previous = result.Previous
-	} else {
-		url = *pageURL
-	}
-}
-
-// MAPB command
-func commandMapB(cnfg *Config) error {
-
 }

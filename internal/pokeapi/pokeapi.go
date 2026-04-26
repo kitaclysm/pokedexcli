@@ -19,17 +19,19 @@ type Location struct {
 }
 
 func GetLocations(pageURL *string) (Location, error) {
-	res, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+	url := "https://pokeapi.co/api/v2/location-area/"
+	if pageURL != nil {
+		url = *pageURL
+	}
+	res, err := http.Get(url)
 	if err != nil {
-		fmt.Println("error getting data")
 		return Location{}, err
 	}
+	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println("error reading data")
 		return Location{}, err
 	}
-	res.Body.Close()
 	if res.StatusCode > 299 {
 		return Location{}, fmt.Errorf("status code error: %d", res.StatusCode)
 	}
@@ -37,11 +39,6 @@ func GetLocations(pageURL *string) (Location, error) {
 	if err := json.Unmarshal(body, &result); err != nil {
 		return Location{}, err
 	}
-
-	// Handle this in commandMap and commandMapB functions?
-	// for _, entry := range result.Results {
-	// 	fmt.Println(entry.Name)
-	// }
 
 	return result, nil
 }
