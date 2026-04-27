@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"bufio"
 	"os"
+
+	"github.com/kitaclysm/pokedexcli/internal/pokeapi"
 )
 
 // standardize input
@@ -22,14 +24,15 @@ func cleanInput(text string) []string {
 }
 
 type Config struct {
+	PokeClient	pokeapi.Client
 	Next		*string
 	Previous	*string
 }
 
 // start the CLI
-func startRepl() {
+func startRepl(cfg *Config) {
 	scanner := bufio.NewScanner(os.Stdin)
-	cfg := &Config{}
+	// cfg := &Config{}
 	for ;; {
 		fmt.Print("Pokedex > ")
 		if scanner.Scan() {

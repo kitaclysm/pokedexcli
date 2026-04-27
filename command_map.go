@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	
-	"github.com/kitaclysm/pokedexcli/internal/pokeapi"
 )
 
 // MAP command
 func commandMap(cfg *Config) error {
-	res, err := pokeapi.GetLocations(cfg.Next)
+	res, err := cfg.PokeClient.ListLocations(cfg.Next)
 	if err != nil {
 		return err
 	}
@@ -26,7 +24,7 @@ func commandMapB(cfg *Config) error {
 		fmt.Println("you're on the first page")
 		return nil
 	}
-	res, err := pokeapi.GetLocations(cfg.Previous)
+	res, err := cfg.PokeClient.ListLocations(cfg.Previous)
 	if err != nil {
 		return err
 	}
