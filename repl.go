@@ -27,6 +27,7 @@ type Config struct {
 	PokeClient	pokeapi.Client
 	Next		*string
 	Previous	*string
+	Pokedex		map[string]pokeapi.Pokemon
 }
 
 // start the CLI
@@ -91,6 +92,11 @@ func getCommands() map[string]cliCommand {
 			name:			"explore",
 			description: 	"Displays all pokemon in specific area (use: explore <area-name>)",
 			callback:		commandExplore,
+		},
+		"catch": {
+			name:			"catch",
+			description:	"Attempts to catch a specified Pokemon. On success, Pokemon is added to Pokedex",
+			callback:		commandCatch,
 		},
 	}
 }
