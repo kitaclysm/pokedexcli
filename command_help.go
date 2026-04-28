@@ -5,7 +5,7 @@ import (
 )
 
 // HELP callback
-func commandHelp(cnfg *Config) error {
+func commandHelp(cnfg *Config, args ...string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()

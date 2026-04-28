@@ -42,9 +42,10 @@ func startRepl(cfg *Config) {
 				continue
 			}
 			userCall := results[0]
+			args := results[1:]
 			command, exists := getCommands()[userCall]
 			if exists {
-				err := command.callback(cfg)
+				err := command.callback(cfg, args...)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -60,7 +61,7 @@ func startRepl(cfg *Config) {
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func(*Config) error
+	callback	func(*Config, ...string) error
 }
 
 // defined commands
@@ -85,6 +86,11 @@ func getCommands() map[string]cliCommand {
 			name:			"mapb",
 			description:	"Displays previous 20 location areas in Pokemon world",
 			callback:		commandMapB,
+		},
+		"explore": {
+			name:			"explore",
+			description: 	"Displays all pokemon in specific area (use: explore <area-name>)",
+			callback:		commandExplore,
 		},
 	}
 }

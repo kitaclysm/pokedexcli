@@ -5,7 +5,7 @@ import (
 )
 
 // MAP command
-func commandMap(cfg *Config) error {
+func commandMap(cfg *Config, args ...string) error {
 	res, err := cfg.PokeClient.ListLocations(cfg.Next)
 	if err != nil {
 		return err
@@ -19,7 +19,8 @@ func commandMap(cfg *Config) error {
 }
 
 // MAPB command
-func commandMapB(cfg *Config) error {
+func commandMapB(cfg *Config, args ...string) error {
+	
 	if cfg.Previous == nil {
 		fmt.Println("you're on the first page")
 		return nil

@@ -6,17 +6,14 @@ import (
 	"encoding/json"
 )
 
-func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
-	url := baseURL + "location-area/"
-	if pageURL != nil {
-		url = *pageURL
-	}
+func (c *Client) GetAreaPokemon(areaName string) (LocationEncounters, error) {
+	url := baseURL + "location-area/" + areaName
 
 	// check cache before HTTP call
 	if cached, ok := c.cache.Get(url); ok {
-		var result RespShallowLocations
+		var result LocationEncounters
 		if err := json.Unmarshal(cached, &result); err != nil {
-			return RespShallowLocations{}, err
+			return LocationEncounters{}, err
 		}
 		return result, nil
 	}
@@ -24,20 +21,20 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	// do HTTP call
 	res, err := c.httpClient.Get(url)
 	if err != nil {
-		return RespShallowLocations{}, err
+		return LocationEncounters{}, err
 	}
 	defer res.Body.Close()
 	if res.StatusCode > 299 {
-		return RespShallowLocations{}, fmt.Errorf("status code error: %d", res.StatusCode)
+		return LocationEncounters{}, fmt.Errorf("status code error: %d", res.StatusCode)
 	}
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return RespShallowLocations{}, err
+		return LocationEncounters{}, err
 	}
 
-	var result RespShallowLocations
+	var result LocationEncounters
 	if err := json.Unmarshal(body, &result); err != nil {
-		return RespShallowLocations{}, err
+		return LocationEncounters{}, err
 	}
 	c.cache.Add(url, body)
 	return result, nil
