@@ -28,6 +28,7 @@ type Config struct {
 	Next		*string
 	Previous	*string
 	Pokedex		map[string]pokeapi.Pokemon
+	Commands	map[string]cliCommand
 }
 
 // start the CLI
